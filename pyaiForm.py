@@ -9,9 +9,9 @@ response_area = None
 lb = None
 action = None
 pyai = Pyai("pyai")
-on_canvas=None
-pysaru_images=[]
-log=[]
+on_canvas = None
+pysaru_images = []
+log = []
 
 
 def putlog(str):
@@ -22,8 +22,9 @@ def putlog(str):
 def prompt():
     p = pyai.name
     if (action.get()) == 0:
-        p += ":"+ pyai.responder.name
+        p += ":" + pyai.responder.name
         return p+">"
+
 
 def chagImg(img):
     canvas.itemconfig(
@@ -31,17 +32,18 @@ def chagImg(img):
         image=pysaru_images[img]
     )
 
+
 def change_looks():
-    em=pyai.emotion.mood
-    if -5<=em<=5:
+    em = pyai.emotion.mood
+    if -5 <= em <= 5:
         chagImg(0)
-    elif -10<=em<=-5:
+    elif -10 <= em <= -5:
         chagImg(1)
-    elif -15<=em<=-10:
+    elif -15 <= em <= -10:
         chagImg(2)
-    elif 5<=em<=10:
+    elif 5 <= em <= 10:
         chagImg(4)
-    elif 10<=em<=15:
+    elif 10 <= em <= 15:
         chagImg(3)
 
 
@@ -56,21 +58,22 @@ def talk():
         putlog(prompt()+response)
         entry.delete(0, tk.END)
 
-    change_looks()    
+    change_looks()
+
 
 def writeLog():
-    now="Pyai System Dialogue Log:"+datetime.now().strftime(
+    now = "Pyai System Dialogue Log:"+datetime.now().strftime(
         "%Y-%m-%d %H:%m::%s"+"\n"
     )
-    log.insert(0,now)
-    with open("log.txt","a",encoding="utf_8") as f:
+    log.insert(0, now)
+    with open("log.txt", "a", encoding="utf_8") as f:
         f.writelines(log)
 
 # ここから画面の設定
 
 
 def run():
-    global entry, response_area, lb, action,canvas,on_canvas,pysaru_images
+    global entry, response_area, lb, action, canvas, on_canvas, pysaru_images
 
     root = tk.Tk()
     root.geometry("880x560")
@@ -80,15 +83,15 @@ def run():
 
     def callback():
         if tkinter.messagebox.askyesno(
-            "Quit?","ランダム辞書を更新してもいいですか？"
-            ):
+            "Quit?", "ランダム辞書を更新してもいいですか？"
+        ):
             pyai.save()
             writeLog()
             root.destroy()
         else:
             root.destroy()
-    
-    root.protocol("WM_DELETE_WINDOW",callback)
+
+    root.protocol("WM_DELETE_WINDOW", callback)
 
     # メニューバー
     menubar = tk.Menu(root)
@@ -113,12 +116,12 @@ def run():
     )
     # キャンバスの作成
     canvas = tk.Canvas(
-                root,
-                width=500,
-                height=300,
-                relief=tk.RIDGE,
-                bd=2
-            )
+        root,
+        width=500,
+        height=300,
+        relief=tk.RIDGE,
+        bd=2
+    )
     canvas.place(x=370, y=0)
 
     pysaru_images.append(tk.PhotoImage(file="nomal.gif"))
@@ -127,7 +130,7 @@ def run():
     pysaru_images.append(tk.PhotoImage(file="tere.gif"))
     pysaru_images.append(tk.PhotoImage(file="wara.gif"))
 
-    on_canvas=canvas.create_image(
+    on_canvas = canvas.create_image(
         0,
         0,
         image=pysaru_images[0],
@@ -168,23 +171,23 @@ def run():
     frame.place(x=30, y=520)
     # リストボックスの作成
     lb = tk.Listbox(
-            root,
-            width=42,
-            height=30,
-            font=font_log
-        )
+        root,
+        width=42,
+        height=30,
+        font=font_log
+    )
     # 縦のスクロールバーの作成
     sb1 = tk.Scrollbar(
-            root,
-            orient=tk.VERTICAL,
-            command=lb.yview
-        )
+        root,
+        orient=tk.VERTICAL,
+        command=lb.yview
+    )
     # 横のスクロールバーの作成
     sb2 = tk.Scrollbar(
-            root,
-            orient=tk.HORIZONTAL,
-            command=lb.xview
-        )
+        root,
+        orient=tk.HORIZONTAL,
+        command=lb.xview
+    )
     # リストボックスとスクロールバーの連動
     lb.configure(yscrollcommand=sb1.set)
     lb.configure(xscrollcommand=sb2.set)
