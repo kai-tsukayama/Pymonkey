@@ -4,6 +4,7 @@ from datetime import datetime
 import tkinter.messagebox
 
 
+
 entry = None
 response_area = None
 lb = None
@@ -62,9 +63,8 @@ def talk():
 
 
 def writeLog():
-    now = "Pyai System Dialogue Log:"+datetime.now().strftime(
-        "%Y-%m-%d %H:%m::%s"+"\n"
-    )
+    now = "Pyai System Dialogue Log:" + datetime.now().strftime(
+        "%Y-%m-%d %H:%m::%S" + "\n")
     log.insert(0, now)
     with open("log.txt", "a", encoding="utf_8") as f:
         f.writelines(log)
