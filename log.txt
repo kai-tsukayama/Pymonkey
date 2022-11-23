@@ -1,3 +1,26 @@
 Pyai System Dialogue Log:2022-11-09 17:11::28
 >ほぇ？
 pyai:Random>いま何時かなぁ
+Pyai System Dialogue Log:2022-11-23 18:11::49
+>明日は雨かなぁ
+pyai:Pattern>正直しんどい
+>明日は雨かなぁ
+pyai:Repeat?>明日は雨かなぁってなに？
+>明日は雨かなぁ
+pyai:Pattern>楽しそうだね
+>明日は雨かなぁ
+pyai:Pattern>喉かわいた
+>は
+pyai:Random>ルンルン
+>明日
+pyai:Pattern>どっちでもいいや
+>雨かな
+pyai:Pattern>ありがとう。
+>雨
+pyai:Random>どっちでもいいや
+>雨
+pyai:Pattern>俺は今回で１４回フラれたことになる
+>雨
+pyai:Random>ありがとう。
+>雨
+pyai:Random>明日は雨かなぁ

@@ -1,6 +1,7 @@
 from turtle import st
 import random
 import re
+from analyzer import*
 
 
 class Dictionary:
@@ -31,10 +32,30 @@ class Dictionary:
             ptn, prs = line.split("\t")
             self.pattern.append(ParseItem(ptn,prs))
 
-    def study(self,input):
+    def study(self,input,parts):
         input=input.rstrip("\n")
+        self.study_random(input)
+        self.study_pattern(input, parts)
+
+    def study_random(self, input):
         if not input in self.random:
             self.random.append(input)
+
+    def study_pattern(self, input, parts):
+        for word, part in parts:
+            if (keyword_check(part)):
+                depend=False
+                for ptn_item in self.pattern:
+                    m=re.search(ptn_item.pattern, word)
+
+                    if(re.search(ptn_item.pattern, word)):
+                        depend=ptn_item
+                        break
+
+                    if depend:
+                        depend.add_phrase(input)
+                    else:
+                        self.pattern.append(ParseItem(word, input))
 
     def save(self):
         for index,element in enumerate(self.random):
@@ -42,6 +63,13 @@ class Dictionary:
 
         with open("dics/random.txt","w",encoding="utf_8") as f:
             f.writelines(self.random)
+
+        pattern=[]
+        for ptn_item in self.pattern:
+            pattern.append(ptn_item.make_line() + "\n")
+
+        with open("dics/pattern1.txt", "w", encoding = "utf_8") as f:
+            f.writelines(pattern)
 
 class ParseItem:
     SEPARATOR='^((-?\d+)##)?(.*)$'
@@ -86,3 +114,16 @@ class ParseItem:
             return(mood>need)
         else:
             return(mood<need)
+        
+    def add_phrase(self, phrase):
+        for p in self.phrases:
+            if p["phrase"] == phrase:
+                return
+        self.phrases.append({"need": 0, "phrase": phrase})
+
+    def make_line(self):
+        pattern = str(self.modify) + "##" + self.pattern
+        phrases = []
+        for p in self.phrases:
+            phrases.append(str(p["need"]) + "##" + str(p["phrase"]))
+        return pattern + "\t" + "|".join(phrases)

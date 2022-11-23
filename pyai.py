@@ -1,5 +1,6 @@
 from responder import *
 from dictionary import*
+from analyzer import*
 
 class Pyai:
   def __init__(self,name):
@@ -13,6 +14,7 @@ class Pyai:
 
   def dialogue(self,input):
     self.emotion.update(input)
+    parts=analyze(input)
     x=random.randint(0,100)
     if x<=60:
       self.responder=self.res_pattern
@@ -22,7 +24,7 @@ class Pyai:
       self.responder=self.res_what
 
     resp=self.responder.response(input,self.emotion.mood)
-    self.dictionary.study(input)
+    self.dictionary.study(input,parts)
     return resp
     
   def save(self):
