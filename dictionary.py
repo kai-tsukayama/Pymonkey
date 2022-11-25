@@ -32,10 +32,29 @@ class Dictionary:
             ptn, prs = line.split("\t")
             self.pattern.append(ParseItem(ptn,prs))
 
+        self.template = {}
+        tfile = open("dics/template.txt", "r", encoding = "utf_8")
+        t_lines = tfile.readlines()
+        tfile.close()
+
+        self.new_t_lines = []
+        for line in t_lines:
+            str = line.rstrip("\n")
+            if (str!=""):
+                self.new_t_lines.append(str)
+
+        for line in self.new_t_lines:
+            count, template = line.split("\t")
+            if not count in self.template:
+                self.template[count] = []
+            
+            self.template[count].append(template)
+
     def study(self,input,parts):
         input=input.rstrip("\n")
         self.study_random(input)
         self.study_pattern(input, parts)
+        self.study_template(parts)
 
     def study_random(self, input):
         if not input in self.random:
@@ -57,6 +76,25 @@ class Dictionary:
                     else:
                         self.pattern.append(ParseItem(word, input))
 
+    def study_template(self, parts):
+        template = ""
+        count = 0
+        for word, part in parts:
+            if (keyword_check(part)):
+                word = "%noun%"
+                count += 1
+            template += word
+
+        if count > 0:
+            count = str(count)
+            if not count in self.template:
+                self.template[count] = []
+
+            if not template in self.template[count]:
+                self.template[count].append(template)
+        
+        # print("出来上がったテンプレート===", self.template)
+
     def save(self):
         for index,element in enumerate(self.random):
             self.random[index]=element+"\n"
@@ -70,6 +108,14 @@ class Dictionary:
 
         with open("dics/pattern1.txt", "w", encoding = "utf_8") as f:
             f.writelines(pattern)
+
+        template = []
+        for key, val in self.template.items():
+            for v in val:
+                template.append(key + "\t" + v + "\n")
+        template.sort()
+        with open("dics/template.txt", "w", encoding="utf_8")as f:
+            f. writelines(template)
 
 class ParseItem:
     SEPARATOR='^((-?\d+)##)?(.*)$'

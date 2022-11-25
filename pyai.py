@@ -11,19 +11,22 @@ class Pyai:
     self.res_random=RandomResponder("Random",self.dictionary)
     self.res_what=RepeatResponder("Repeat?",self.dictionary)
     self.res_pattern=PatternResponder("Pattern",self.dictionary)
+    self.resp_template=TemplateResponder("Template", self.dictionary)
 
   def dialogue(self,input):
     self.emotion.update(input)
     parts=analyze(input)
-    x=random.randint(0,100)
-    if x<=60:
+    x=random.randint(1,100)
+    if x<=40:
       self.responder=self.res_pattern
-    elif 61<=x<=90:
+    elif 41<=x<=70:
+      self.responder = self.resp_template
+    elif 71 <= x <= 90:
       self.responder=self.res_random
     else:
       self.responder=self.res_what
 
-    resp=self.responder.response(input,self.emotion.mood)
+    resp=self.responder.response(input,self.emotion.mood, parts)
     self.dictionary.study(input,parts)
     return resp
     
