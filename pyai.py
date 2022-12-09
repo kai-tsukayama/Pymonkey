@@ -12,17 +12,21 @@ class Pyai:
     self.res_what=RepeatResponder("Repeat?",self.dictionary)
     self.res_pattern=PatternResponder("Pattern",self.dictionary)
     self.resp_template=TemplateResponder("Template", self.dictionary)
+    self.resp_markov = MarkovResponder("Markov", self.dictionary)
+
 
   def dialogue(self,input):
     self.emotion.update(input)
     parts=analyze(input)
     x=random.randint(1,100)
-    if x<=40:
+    if x<= 30:
       self.responder=self.res_pattern
-    elif 41<=x<=70:
+    elif 31 <=x<= 50:
       self.responder = self.resp_template
-    elif 71 <= x <= 90:
+    elif 51 <= x <= 70:
       self.responder=self.res_random
+    elif 71 <= x <= 90:
+      self.responder = self.resp_markov
     else:
       self.responder=self.res_what
 

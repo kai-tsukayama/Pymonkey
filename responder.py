@@ -1,6 +1,8 @@
 import random
 import re
 from analyzer import*
+from markov import *
+from itertools import chain
 
 class Responder:
   def __init__(self,name,dictionary):
@@ -47,3 +49,24 @@ class TemplateResponder(Responder):
         template = template.replace("%noun%", word, 1)
       return template
     return random.choice(self.dictionary.random)
+
+class MarkovResponder(Responder):
+  def response(self, input, mood, parts):
+    m = []
+    for word, part in parts:
+      if keyword_check(part):
+        for sentence in self.dictionary.sentences:
+          find = ".*" + word + ".*"
+          tmp = re.findall(find, sentence)
+          if tmp:
+            m.append(tmp)
+
+    m = list(chain.from_iterable(m))
+
+    check = set(m)
+    m = list(check)
+
+    if m:
+      return(random.choice(m))
+    return random.choice(self.dictionary.random)
+    

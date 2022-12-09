@@ -1,54 +1,71 @@
-from turtle import st
+# from turtle import st
 import random
 import re
 from analyzer import*
+from markov import *
+
 
 
 class Dictionary:
     def __init__(self):
+        self.load_random()
+        self.load_pattern()
+        self.load_template()
+        self.load_markov()
+
+    def load_random(self):
         self.random = []
-        rfile = open("dics/random1.txt", "r", encoding="utf_8")
-        r_lines = rfile.readlines()
+        rfile = open("dics/random.txt", "r", encoding= "utf_8")
+        r_lines = rfile.readline()
         rfile.close()
 
-        self.random = []
         for line in r_lines:
             str = line.rstrip("\n")
             if (str != ""):
                 self.random.append(str)
 
-        pfile = open("dics/pattern1.txt", "r", encoding="utf_8")
+    def load_pattern(self):
+        self.pattern = []
+        pfile = open("dics/pattern1.txt", "r", encoding= "utf_8")
         p_lines = pfile.readlines()
         pfile.close()
-
         self.new_lines = []
         for line in p_lines:
             str = line.rstrip("\n")
             if (str != ""):
                 self.new_lines.append(str)
 
-        self.pattern = []
         for line in self.new_lines:
             ptn, prs = line.split("\t")
-            self.pattern.append(ParseItem(ptn,prs))
+            self.pattern.append(ParseItem(ptn, prs))
 
+    def load_template(self):
         self.template = {}
-        tfile = open("dics/template.txt", "r", encoding = "utf_8")
+        tfile = open("dics/template.txt", "r", encoding= "utf_8")
         t_lines = tfile.readlines()
+
         tfile.close()
 
         self.new_t_lines = []
         for line in t_lines:
             str = line.rstrip("\n")
-            if (str!=""):
+            if (str != ""):
                 self.new_t_lines.append(str)
 
         for line in self.new_t_lines:
             count, template = line.split("\t")
             if not count in self.template:
                 self.template[count] = []
-            
+
             self.template[count].append(template)
+
+    def load_markov(self):
+        self.sentences = []
+        markov = Markov()
+        text = markov.make()
+        self.sentences = text.split("\n")
+        if "" in self.sentences:
+            self.sentences.remove("")
 
     def study(self,input,parts):
         input=input.rstrip("\n")
