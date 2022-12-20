@@ -2,6 +2,8 @@ import tkinter as tk
 from pyai import *
 from datetime import datetime
 import tkinter.messagebox
+from pyai import *
+from is_weather import *
 
 
 
@@ -13,6 +15,8 @@ pyai = Pyai("pyai")
 on_canvas = None
 pysaru_images = []
 log = []
+question = 0
+weather = WeatherResponder()
 
 
 def putlog(str):
@@ -49,15 +53,28 @@ def change_looks():
 
 
 def talk():
+    global question
     value = entry.get()
     if not value:
         response_area.configure(text="なに？")
+    elif value == "天気予報":
+        if question == 0:
+            response_area.configure(text = "どこの天気？")
+            question = 1
+            entry.delete(0, tk.END)
+    elif question == 1:
+        response = weather.is_weather(value)
+        response_area.configure(text = response)
+        question = 0
+        entry.delete(0, tk.END)
     else:
         response = pyai.dialogue(value)
-        response_area.configure(text=response)
-        putlog(">"+value)
-        putlog(prompt()+response)
+        response_area.configure(text = response)
+        putlog("> " + value)
+        putlog(prompt() + response)
         entry.delete(0, tk.END)
+
+
 
     change_looks()
 
